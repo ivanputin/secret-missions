@@ -4,13 +4,16 @@ name: Build NeoForge mod JAR
 on:
   workflow_dispatch:
   push:
-    branches: [main, master]
+    branches:
+      - main
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Java 21
@@ -24,11 +27,13 @@ jobs:
         with:
           gradle-version: '8.10.2'
 
-      - name: Build mod
+      - name: Build Secret Missions
+        working-directory: SecretMissions-NeoForge-1.21.1
         run: gradle --no-daemon build
 
-      - name: Upload mod
+      - name: Upload compiled mod
         uses: actions/upload-artifact@v4
         with:
           name: SecretMissions-JAR
-          path: build/libs/*.jar
+          path: SecretMissions-NeoForge-1.21.1/build/libs/*.jar
+          if-no-files-found: error
